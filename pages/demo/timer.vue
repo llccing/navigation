@@ -1,0 +1,181 @@
+<template>
+  <div class="about-timer">
+    <div v-show="showTime" class="wrap">
+      <h1 style="text-align: center;">计时器</h1>
+      <table>
+        <tr>
+          <td>分钟</td>
+          <td>秒</td>
+          <td></td>
+          <tr>
+            <td>
+              <el-input type="number" v-model="minutes" min="0" max="59"></el-input>
+            </td>
+            <td>
+              <el-input type="number" v-model="seconds" min="0" max="59"></el-input>
+            </td>
+            <td>
+              <el-button type="primary" @click="showTime = false">设定时间</el-button>
+              <el-button type="info" @click="autoSetTime(10)">10分钟</el-button>
+              <el-button type="info" @click="autoSetTime(30)">30分钟</el-button>
+            </td>
+          </tr>
+      </table>
+    </div>
+
+    <div v-show="!showTime" class="show">
+      <h1 style="text-align: center;">计时器</h1>
+      <div class="show-time">
+        <h2>
+          <span>{{showMinutes}}</span>
+          <span class="point">:</span>
+          <span>{{showSeconds}}</span>
+        </h2>
+      </div>
+      <div class="btn-wrap">
+        <el-button type="primary" @click="startTime">开始</el-button>
+        <el-button @click="resetTime">重置</el-button>
+      </div>
+    </div>
+
+    <audio style="display: none;" id="audioEle" controls preload="auto">
+      <source src="../../assets/timer.alert.mp3" /> sorry，您的浏览器不支持audio标签，您可以试试Chrome浏览器。
+    </audio>
+  </div>
+</template>
+<script>
+export default {
+  name: 'timer',
+  data() {
+    return {
+      timeInterval: '',
+      time: '',
+      minutes: '',
+      seconds: '',
+      // 是否在计时中
+      doing: true,
+      showTime: true,
+    }
+  },
+  methods: {
+    startAudio() {
+      let audioEle = document.getElementById('audioEle')
+      audioEle.play()
+    },
+    autoSetTime(minutes) {
+      let totalSeconds = minutes * 60
+
+      this.minutes = Number.parseInt(totalSeconds / 60, 10)
+      this.seconds = totalSeconds % 60
+      this.showTime = false
+    },
+    startTime() {
+      if (!this.minutes) {
+        this.minutes = 0
+      }
+      if (!this.seconds) {
+        this.seconds = 0
+      }
+
+      let totalSeconds = this.minutes * 60 + Number.parseInt(this.seconds)
+
+      this.timeInterval = setInterval(() => {
+        totalSeconds--
+        if (totalSeconds > 0) {
+          this.minutes = Number.parseInt(totalSeconds / 60, 10)
+          this.seconds = totalSeconds % 60
+        } else {
+          this.$notify({
+            title: '提示',
+            type: 'info',
+            message: '时间已到！',
+          })
+          clearInterval(this.timeInterval)
+          this.startAudio()
+        }
+      }, 2000)
+    },
+    resetTime() {
+      this.showTime = true
+      this.minutes = 0
+      this.seconds = 0
+      clearInterval(this.timeInterval)
+    },
+  },
+  computed: {
+    showMinutes() {
+      if (this.minutes < 10) {
+        return `0${this.minutes}`
+      }
+      return this.minutes
+    },
+    showSeconds() {
+      if (this.seconds < 10) {
+        return `0${this.seconds}`
+      }
+      return this.seconds
+    },
+  },
+}
+</script>
+<style>
+.about-timer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.wrap {
+  width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  text-align: -webkit-center;
+  margin-top: 200px;
+}
+
+table tr td {
+  text-align: center;
+  font-size: 24px;
+}
+.el-input__inner {
+  font-size: 24px;
+}
+
+.show {
+  background: #000;
+  color: #fff;
+  font-weight: 600;
+  font-size: 48px;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+
+.show-time {
+  margin-top: 100px;
+}
+
+.show-time .point {
+  position: relative;
+  bottom: 5px;
+  /* animation: blink 1s infinite steps(1); */
+}
+
+@keyframes blink {
+  50% {
+    color: transparent;
+  }
+}
+
+.btn-wrap {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 100%;
+  text-align: right;
+}
+</style>
