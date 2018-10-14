@@ -24,18 +24,23 @@
     </div>
 
     <div v-show="!showTime" class="show">
-      <h1 style="text-align: center;">计时器</h1>
-      <div class="show-time">
-        <h2>
+      <h2 style="text-align: center;">计时器</h2>
+      <div class="show-time" :style="{'font-size': `${fontSize}px`}">
+        <h1>
           <span>{{showMinutes}}</span>
           <span class="point">:</span>
           <span>{{showSeconds}}</span>
-        </h2>
+        </h1>
       </div>
       <div class="btn-wrap">
-        <el-button v-if="!doing" type="primary" @click="startTime">开始</el-button>
-        <el-button v-else type="primary" @click="pauseTime">暂停</el-button>
-        <el-button @click="resetTime">重置</el-button>
+        <el-button-group>
+          <el-button v-if="!doing" type="primary" @click="startTime">开始</el-button>
+          <el-button v-else type="primary" @click="pauseTime">暂停</el-button>
+          <el-button @click="resetTime">重置</el-button>
+          <el-button @click="fontSizePlus" type="info" icon="el-icon-plus"></el-button>
+          <el-button @click="fontSizeMinus" type="info" icon="el-icon-minus"></el-button>
+        </el-button-group>
+
       </div>
     </div>
 
@@ -56,6 +61,7 @@ export default {
       // 是否在计时中
       doing: false,
       showTime: true,
+      fontSize: 100,
     }
   },
   methods: {
@@ -98,6 +104,11 @@ export default {
       }
 
       let totalSeconds = this.minutes * 60 + Number.parseInt(this.seconds)
+
+      if(totalSeconds===0){
+        return;
+      }
+      
       this.timeInterval = setInterval(() => {
         totalSeconds--
         this.minutes = Number.parseInt(totalSeconds / 60, 10)
@@ -108,6 +119,7 @@ export default {
             type: 'info',
             message: '时间已到！',
           })
+          this.doing = false
           clearInterval(this.timeInterval)
           this.startAudio()
         }
@@ -129,6 +141,13 @@ export default {
       this.seconds = 0
       this.doing = false
       clearInterval(this.timeInterval)
+    },
+
+    fontSizePlus() {
+      this.fontSize+=10
+    },
+    fontSizeMinus() {
+      this.fontSize-=10
     },
   },
   computed: {
@@ -152,7 +171,7 @@ export default {
       audioEle.muted = true
       audioEle.play()
 
-      audioEle.addEventListener("ended", function(){
+      audioEle.addEventListener('ended', function() {
         audioEle.muted = false
       })
     })
@@ -203,7 +222,10 @@ table tr td {
 .show-time .point {
   position: relative;
   bottom: 5px;
-  /* animation: blink 1s infinite steps(1); */
+}
+
+.show-time {
+  font-size: 120px;
 }
 
 @keyframes blink {
