@@ -2,21 +2,12 @@
 
 > My amazing Nuxt.js project
 
-## Build Setup
+## demo
 
-``` bash
-# install dependencies
-$ npm install
+### 计时器
 
-# serve with hot reload at localhost:3000
-$ npm run dev
+从功能上来讲，是一个朋友想要的一个计时功能，用于PPT汇报、演讲及时相关。
 
-# build for production and launch server
-$ npm run build
-$ npm start
+从实现上来讲，实现起来的相对比较有难度的其实是时间逻辑的控制。还有就是使用audio来进行提醒。
 
-# generate static project
-$ npm run generate
-```
-
-For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+从技术上来讲，使用nuxt试试手，然后部署在去年买的server上，一年300大洋，实际上没有用几天……

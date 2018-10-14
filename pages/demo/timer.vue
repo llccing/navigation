@@ -15,7 +15,7 @@
               <el-input type="number" v-model="seconds" min="0" max="59"></el-input>
             </td>
             <td>
-              <el-button type="primary" @click="showTime = false">设定时间</el-button>
+              <el-button type="primary" @click="autoSetTime('set')">设定时间</el-button>
               <el-button type="info" @click="autoSetTime(10)">10分钟</el-button>
               <el-button type="info" @click="autoSetTime(30)">30分钟</el-button>
             </td>
@@ -33,7 +33,8 @@
         </h2>
       </div>
       <div class="btn-wrap">
-        <el-button type="primary" @click="startTime">开始</el-button>
+        <el-button v-if="!doing" type="primary" @click="startTime">开始</el-button>
+        <el-button v-else type="primary" @click="pauseTime">暂停</el-button>
         <el-button @click="resetTime">重置</el-button>
       </div>
     </div>
@@ -53,23 +54,42 @@ export default {
       minutes: '',
       seconds: '',
       // 是否在计时中
-      doing: true,
+      doing: false,
       showTime: true,
     }
   },
   methods: {
+    // 播放声音
     startAudio() {
       let audioEle = document.getElementById('audioEle')
       audioEle.play()
     },
+
+    // 时间设定
     autoSetTime(minutes) {
+      if (minutes === 'set') {
+        if (!this.minutes && !this.seconds) {
+          this.$notify.error({
+            title: '提示',
+            message: '时间不能空',
+          })
+        } else {
+          this.showTime = false
+        }
+        return
+      }
+
       let totalSeconds = minutes * 60
 
       this.minutes = Number.parseInt(totalSeconds / 60, 10)
       this.seconds = totalSeconds % 60
       this.showTime = false
     },
+
+    // 开始计时
     startTime() {
+      this.doing = !this.doing
+
       if (!this.minutes) {
         this.minutes = 0
       }
@@ -78,13 +98,11 @@ export default {
       }
 
       let totalSeconds = this.minutes * 60 + Number.parseInt(this.seconds)
-
       this.timeInterval = setInterval(() => {
         totalSeconds--
-        if (totalSeconds > 0) {
-          this.minutes = Number.parseInt(totalSeconds / 60, 10)
-          this.seconds = totalSeconds % 60
-        } else {
+        this.minutes = Number.parseInt(totalSeconds / 60, 10)
+        this.seconds = totalSeconds % 60
+        if (totalSeconds === 0) {
           this.$notify({
             title: '提示',
             type: 'info',
@@ -93,12 +111,23 @@ export default {
           clearInterval(this.timeInterval)
           this.startAudio()
         }
-      }, 2000)
+      }, 1000)
     },
+
+    // 暂停计时
+    pauseTime() {
+      this.doing = !this.doing
+      if (!this.doing) {
+        clearInterval(this.timeInterval)
+      }
+    },
+
+    // 重置时间
     resetTime() {
       this.showTime = true
       this.minutes = 0
       this.seconds = 0
+      this.doing = false
       clearInterval(this.timeInterval)
     },
   },
@@ -115,6 +144,18 @@ export default {
       }
       return this.seconds
     },
+  },
+
+  mounted() {
+    let audioEle = document.getElementById('audioEle')
+    document.addEventListener('touchstart', function() {
+      audioEle.muted = true
+      audioEle.play()
+
+      audioEle.addEventListener("ended", function(){
+        audioEle.muted = false
+      })
+    })
   },
 }
 </script>
