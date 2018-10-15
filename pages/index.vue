@@ -10,7 +10,8 @@
       </h2>
       <div class="links">
 
-        <a href="/demo/timer" class="button--green">计时器</a>
+        <a href="/demo/timerDesc" class="button--green">倒计时</a>
+        <a href="/demo/timerAsc" class="button--green">正计时</a>
       </div>
     </div>
   </section>
