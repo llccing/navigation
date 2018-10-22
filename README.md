@@ -1,6 +1,6 @@
-# navgation
+# navgation 导航
 
-> My amazing Nuxt.js project
+门户项目，待样式能看，我会优化你！
 
 ## demo
 
