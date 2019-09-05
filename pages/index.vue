@@ -3,15 +3,15 @@
     <div>
       <logo/>
       <h1 class="title">
-        Demo
+        llccing
       </h1>
       <h2 class="subtitle">
-        made by <a href="/about">lcf33123@foxmail.com</a> 
+        made by <a href="/admin">lcf33123@foxmail.com</a> 
       </h2>
       <div class="links">
 
-        <a href="/demo/timerDesc" class="button--green">倒计时</a>
-        <a href="/demo/timerAsc" class="button--green">正计时</a>
+        <a href="/demo/timerDesc" class="button--green">blog</a>
+        <a href="/demo" class="button--green">demo</a>
       </div>
     </div>
   </section>
@@ -27,12 +27,12 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .container {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  margin-top: 20px;
   text-align: center;
 }
 
