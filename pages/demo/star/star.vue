@@ -119,6 +119,7 @@ export default {
     display: flex;
     justify-content: center;
     .item {
+      padding: 0 2px;
       flex-basis: 50px;
       cursor: pointer;
 
