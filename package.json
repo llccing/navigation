@@ -14,6 +14,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "bootstrap-vue": "^2.0.0-rc.28",
     "cross-env": "^5.2.0",
     "element-ui": "2.4.11",
     "less": "^3.10.1",
