@@ -1,7 +1,7 @@
 {
   "name": "navgation",
   "version": "1.0.0",
-  "description": "My amazing Nuxt.js project",
+  "description": "使用nuxt搭建的高可用、响应式的网站。",
   "author": "llccing",
   "private": true,
   "scripts": {
