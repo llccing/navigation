@@ -1,8 +1,30 @@
 <template>
   <div class="about-timer">
+    <div v-show="showTime" class="wrap">
+      <h1 style="text-align: center;">倒计时</h1>
+      <table>
+        <tr>
+          <td>分钟</td>
+          <td>秒</td>
+          <td></td>
+          <tr>
+            <td>
+              <el-input type="number" v-model="minutes" min="0" max="59"></el-input>
+            </td>
+            <td>
+              <el-input type="number" v-model="seconds" min="0" max="59"></el-input>
+            </td>
+            <td>
+              <el-button type="primary" @click="autoSetTime('set')">设定时间</el-button>
+              <el-button type="info" @click="autoSetTime(10)">10分钟</el-button>
+              <el-button type="info" @click="autoSetTime(30)">30分钟</el-button>
+            </td>
+          </tr>
+      </table>
+    </div>
 
-    <div class="show">
-      <h2 style="text-align: center;">正计时</h2>
+    <div v-show="!showTime" class="show">
+      <h2 style="text-align: center;">计时器</h2>
       <div class="show-time" :style="{'font-size': `${fontSize}px`}">
         <h1>
           <span>{{showMinutes}}</span>
@@ -24,7 +46,7 @@
     </div>
 
     <audio style="display: none;" id="audioEle" controls preload="auto">
-      <source src="../../assets/timer.alert.mp3" /> sorry，您的浏览器不支持audio标签，您可以试试Chrome浏览器。
+      <source src="~/assets/timer.alert.mp3" /> sorry，您的浏览器不支持audio标签，您可以试试Chrome浏览器。
     </audio>
   </div>
 </template>
@@ -34,14 +56,43 @@ export default {
   data() {
     return {
       timeInterval: '',
-      minutes: 0,
-      seconds: 0,
+      time: '',
+      minutes: '',
+      seconds: '',
       // 是否在计时中
       doing: false,
+      showTime: true,
       fontSize: 100,
     }
   },
   methods: {
+    // 播放声音
+    startAudio() {
+      let audioEle = document.getElementById('audioEle')
+      audioEle.play()
+    },
+
+    // 时间设定
+    autoSetTime(minutes) {
+      if (minutes === 'set') {
+        if (!this.minutes && !this.seconds) {
+          this.$notify.error({
+            title: '提示',
+            message: '时间不能空',
+          })
+        } else {
+          this.showTime = false
+        }
+        return
+      }
+
+      let totalSeconds = minutes * 60
+
+      this.minutes = Number.parseInt(totalSeconds / 60, 10)
+      this.seconds = totalSeconds % 60
+      this.showTime = false
+    },
+
     // 开始计时
     startTime() {
       this.doing = !this.doing
@@ -55,10 +106,24 @@ export default {
 
       let totalSeconds = this.minutes * 60 + Number.parseInt(this.seconds)
 
+      if(totalSeconds===0){
+        return;
+      }
+      
       this.timeInterval = setInterval(() => {
-        totalSeconds++
+        totalSeconds--
         this.minutes = Number.parseInt(totalSeconds / 60, 10)
         this.seconds = totalSeconds % 60
+        if (totalSeconds === 0) {
+          this.$notify({
+            title: '提示',
+            type: 'info',
+            message: '时间已到！',
+          })
+          this.doing = false
+          clearInterval(this.timeInterval)
+          this.startAudio()
+        }
       }, 1000)
     },
 
@@ -72,6 +137,7 @@ export default {
 
     // 重置时间
     resetTime() {
+      this.showTime = true
       this.minutes = 0
       this.seconds = 0
       this.doing = false
@@ -79,24 +145,25 @@ export default {
     },
 
     fontSizePlus() {
-      this.fontSize += 10
+      this.fontSize+=10
     },
     fontSizeMinus() {
-      this.fontSize -= 10
+      this.fontSize-=10
     },
+
     toIndex(){
       this.$router.push('/')
     }
   },
   computed: {
     showMinutes() {
-      if (Number.parseInt(this.minutes) < 10) {
+      if (this.minutes < 10) {
         return `0${this.minutes}`
       }
       return this.minutes
     },
     showSeconds() {
-      if (Number.parseInt(this.seconds) < 10) {
+      if (this.seconds < 10) {
         return `0${this.seconds}`
       }
       return this.seconds

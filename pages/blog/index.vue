@@ -1,20 +1,13 @@
 <template>
   <div>
-    <Navbar />
-
-    <Photo />
-
-    <List/>
+    <List />
   </div>
 </template>
 <script>
-import Navbar from "./home/Navbar";
-import Photo from "./home/Photo";
-import List from './home/List'
+import List from "./home/List";
 export default {
+  layout: "blog",
   components: {
-    Navbar,
-    Photo,
     List
   }
 };

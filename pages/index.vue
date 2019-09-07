@@ -1,12 +1,12 @@
 <template>
-  <blogIndex />
+<simple/>
 </template>
 
 <script>
-import blogIndex from "./blog";
+import simple from './home/simple'
 export default {
   components: {
-    blogIndex
+    simple
   }
 };
 </script>

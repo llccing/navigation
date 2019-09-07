@@ -13,16 +13,12 @@ export default {
     return {
       links: [
         {
-          link: "/demo/timerDesc",
+          link: "/demo/timer/timerDesc",
           title: "倒计时"
         },
         {
-          link: "/demo/timerAsc",
+          link: "/demo/timer/timerAsc",
           title: "正计时"
-        },
-        {
-          link: "/demo/selectGroup",
-          title: "多级下拉联动赋值"
         }
       ]
     };
