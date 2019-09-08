@@ -5,7 +5,7 @@
     <b-container>
       <b-row>
         <b-col lg="8" offset-lg="1" md="10" offset-md="1">
-          <nuxt />
+          <nuxt class="blog-content"/>
         </b-col>
       </b-row>
     </b-container>
@@ -22,7 +22,7 @@ export default {
 };
 </script>
 <style lang="less">
-.my-blog {
+.blog-content {
   font-family: "Lora", "Times New Roman", serif;
 }
 </style>
