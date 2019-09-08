@@ -1,9 +1,10 @@
 <template>
-  <list :isLarge="true" :data="list" :ifPage="true" />
+  <list :isLarge="false" :data="list" ifPage="true" />
 </template>
 <script>
 import list from "../components/list";
 export default {
+  layout: "blog",
   components: {
     list
   },
@@ -55,5 +56,3 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
-</style>

@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <List />
+  <div class="my-blog">
+    <listContent/> 
   </div>
 </template>
 <script>
-import List from "./home/List";
+import listContent from "./home/List";
 export default {
   layout: "blog",
   components: {
-    List
+    listContent
   }
 };
 </script>
